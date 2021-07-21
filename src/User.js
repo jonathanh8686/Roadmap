@@ -1,9 +1,10 @@
 class User {
-	constructor(name, location, canDrive) {
+	constructor(name, location, canDrive, color) {
 		this.name = name;
 		this.location = location;
 		this.canDrive = canDrive;
+		this.color = color;
 	}
 }
 
-module.exports = User;
+export default User;

@@ -6,3 +6,23 @@
   justify-content: center;
   align-items: center;
 }
+
+/* -----
+SVG Icons - svgicons.sparkk.fr
+----- */
+
+.svg-icon {
+  width: 2em;
+  height: 2em;
+}
+
+.svg-icon path,
+.svg-icon polygon,
+.svg-icon rect {
+  fill: #cab600;
+}
+
+.svg-icon circle {
+  stroke: #d6c100;
+  stroke-width: 1;
+}
