@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import UserPrompt from "./UserPrompt"
+import AddUserPrompt from "./AddUserPrompt"
 import User from "../User"
 var randomColor = require('randomcolor');
 
@@ -19,7 +19,7 @@ function AddUserButton(props) {
 				Add New User
 			</button>
 
-			<UserPrompt isOpen = {isOpen} setIsOpen = {setIsOpen} handleAddUser = {handleAddUser}></UserPrompt>
+			<AddUserPrompt isOpen = {isOpen} setIsOpen = {setIsOpen} handleAddUser = {handleAddUser}></AddUserPrompt>
 		</div>
 
 	);

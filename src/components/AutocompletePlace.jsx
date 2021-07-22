@@ -16,6 +16,13 @@ export default class AutocompletePlace extends Component {
       throw new Error("You don't have any 'process.env.REACT_APP_MAPBOX_API_KEY'")
     }
   }
+
+
+  componentDidMount() {
+    if (this.props.defaultValue !== undefined)
+      this.handleItemClicked(this.props.defaultValue);
+  }
+
   handleSearchChange(e) {
     this.setState({
       search: e.target.value,
@@ -56,9 +63,9 @@ export default class AutocompletePlace extends Component {
   render() {
     return (
       <div className="AutocompletePlace">
-        <input style={{width:"100%"}} className="AutocompletePlace-input shadow appearance-none border border-blue-300 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" type="text" value={this.state.search} onChange={this.handleSearchChange} placeholder="Address" />
+        <input style={{ width: "100%" }} className="AutocompletePlace-input shadow appearance-none border border-blue-300 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" type="text" value={this.state.search} onChange={this.handleSearchChange} placeholder="Address" />
         <ul className="AutocompletePlace-results">
-           
+
           {this.state.results.map(place => (
             <li
               key={place.id}

@@ -21,12 +21,12 @@ function UserPrompt(props) {
 						To add a new user, enter all the required information to be added onto the map.
 					</DialogContentText>
 
-					<input style={{ width: "100%" }} 
-					className="shadow appearance-none border border-blue-300 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" 
-					type="text" onChange={(e) => setUserName(e.target.value)} placeholder="Name" />
+					<input style={{ width: "100%" }}
+						className="shadow appearance-none border border-blue-300 rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+						type="text" onChange={(e) => setUserName(e.target.value)} placeholder="Name"/>
 
 					<label className="inline-flex items-center mt-4 mb-6">
-						<input type="checkbox" className="form-checkbox h-5 w-5 text-red-600" onChange={(e) => {setUserCanDrive(e.target.value);}} /><span className="ml-2 text-gray-700">Can Drive?</span>
+						<input type="checkbox" className="form-checkbox h-5 w-5 text-red-600" onChange={(e) => { setUserCanDrive(e.target.value); }} /><span className="ml-2 text-gray-700">Can Drive?</span>
 					</label>
 
 					<Autocomplete onSelect={place => {

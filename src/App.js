@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import MapGL, { Marker } from '@urbica/react-map-gl';
 import Pin from './components/pin';
@@ -15,22 +15,26 @@ function App() {
     });
 
   const [users, setUsers] = useState([]);
+  const [toRemove, setToRemove] = useState(undefined);
 
   const addUser = (user) => {
+    console.log("Adding:\t" + user.canDrive)
     setUsers([...users, user]);
   }
 
-  const [destination, setDestination] = useState();
+  useEffect(() => {
+    if (toRemove !== undefined) {
+      setUsers(users.filter(u => u !== toRemove));
+      setToRemove(undefined);
+    }
+  }, [users, toRemove]);
 
+
+  const [destination, setDestination] = useState();
 
   return (
     <div className="App">
-      <Sidebar
-        setUsers={setUsers}
-        addUser={addUser}
-        setDestination={setDestination}
-        users={users}
-      ></Sidebar>
+
 
 
       <MapGL {...viewport}
@@ -38,6 +42,15 @@ function App() {
         mapStyle="mapbox://styles/mapbox/navigation-night-v1"
         style={{ width: '100vw', height: '100vh' }}
         onViewportChange={(viewport) => { setViewport(viewport) }}>
+
+        <Sidebar
+          setUsers={setUsers}
+          addUser={addUser}
+          queueRemove={setToRemove}
+          setDestination={setDestination}
+          destination={destination}
+          users={users}
+        ></Sidebar>
 
         {users.map(function (user, name) {
           return <Marker
