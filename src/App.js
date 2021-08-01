@@ -4,6 +4,11 @@ import MapGL, { Marker } from '@urbica/react-map-gl';
 import Pin from './components/pin';
 import Sidebar from "./components/Sidebar";
 import 'mapbox-gl/dist/mapbox-gl.css';
+import './CalculateBest'
+import { solve } from './CalculateBest';
+
+const mbxMatrix = require('@mapbox/mapbox-sdk/services/matrix');
+const matrixService = mbxMatrix({ accessToken: process.env.REACT_APP_MAPBOX_API_KEY })
 
 
 function App() {
@@ -15,10 +20,11 @@ function App() {
     });
 
   const [users, setUsers] = useState([]);
+  const [destination, setDestination] = useState();
   const [toRemove, setToRemove] = useState(undefined);
+  const [bestPermutation, setBestPermutation] = useState([]);
 
   const addUser = (user) => {
-    console.log("Adding:\t" + user.canDrive)
     setUsers([...users, user]);
   }
 
@@ -27,16 +33,37 @@ function App() {
       setUsers(users.filter(u => u !== toRemove));
       setToRemove(undefined);
     }
+
+    console.log("here")
+
+    // if there are less than 10 people, we can use the traffic request profile, otherwise
+    // we have to use the normal driving profile.
+    if (users.length > 1) {
+      console.log(users);
+      matrixService.getMatrix({
+        points: 
+          users.map((user) => {
+            return {coordinates: [user.location.center[0], user.location.center[1]]}
+          })
+        ,
+        profile: 'driving'
+      })
+        .send()
+        .then(response => {
+          if(response.body.code === "InvalidInput") {
+            console.error(response.body.code.message);
+          }
+          setBestPermutation(solve(users, response.body));
+        });
+    }
   }, [users, toRemove]);
 
-
-  const [destination, setDestination] = useState();
+  useEffect(() => {
+    console.log(bestPermutation)
+  }, [bestPermutation]);
 
   return (
     <div className="App">
-
-
-
       <MapGL {...viewport}
         accessToken={process.env.REACT_APP_MAPBOX_API_KEY}
         mapStyle="mapbox://styles/mapbox/navigation-night-v1"
@@ -51,7 +78,6 @@ function App() {
           destination={destination}
           users={users}
         ></Sidebar>
-
         {users.map(function (user, name) {
           return <Marker
             offsetTop={-20} offsetLeft={-10}
@@ -61,7 +87,6 @@ function App() {
             <Pin size={25} color={user.color} driving={user.canDrive} />
           </Marker>
         })}
-
         {destination !== undefined && <Marker
           offsetTop={-20} offsetLeft={-10}
           key="destination"
